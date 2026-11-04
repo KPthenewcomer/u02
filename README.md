@@ -1,6 +1,6 @@
 # Kevin | Developer Portfolio
 
-Publicerad sida: [LÄGG IN LÄNK HÄR]
+Publicerad sida: https://github.com/KPthenewcomer/u01.git
 
 ## Reflektion
 
