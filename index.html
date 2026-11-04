@@ -14,6 +14,7 @@
     />
 
     <link rel="stylesheet" href="css/style.css" />
+    <script src="js/main.js" defer></script>
   </head>
 
   <body>
@@ -111,76 +112,31 @@
         </div>
       </section>
 
-      <section id="about" class="about-section">
-        <h2>About Me</h2>
+      <section id="about" class="about-section" aria-labelledby="about-heading">
+  <h2 id="about-heading">About Me</h2>
 
-        <p class="about-text">
-          The Generator App is an online tool that helps you to export
-          ready-made templates ready to work as your future website. It helps
-          you to combine slides, panels and other components and export it as a
-          set of static files: HTML/CSS/JS.
-        </p>
+  <p id="cv-status" role="status"></p>
 
-        <h2>Work Experience</h2>
+  <button id="cv-retry" type="button" hidden>
+    Try again
+  </button>
 
-        <div class="experience-list">
-          <article class="experience-item">
-            <div>
-              <h3>Junior Web Developer</h3>
-              <p>Dr. Rajkumar’s Learning App</p>
-              <p>Bengaluru</p>
-            </div>
+  <div class="cv-grid">
+    <section class="cv-column" aria-labelledby="work-heading">
+      <h3 id="work-heading">Work Experience</h3>
+      <ul id="work-list" class="experience-list"></ul>
+    </section>
 
-            <div class="experience-information">
-              <span>Full Time</span>
-              <p>Sep 2021 – Dec 2021</p>
-            </div>
-          </article>
+    <section class="cv-column" aria-labelledby="education-heading">
+      <h3 id="education-heading">Education</h3>
+      <ul id="education-list" class="experience-list"></ul>
+    </section>
+  </div>
 
-          <article class="experience-item">
-            <div>
-              <h3>Web Development Intern</h3>
-              <p>IonPixelz Web Solutions</p>
-              <p>Bengaluru</p>
-            </div>
-
-            <div class="experience-information">
-              <span>Internship</span>
-              <p>Sep 2021 – Dec 2021</p>
-            </div>
-          </article>
-
-          <article class="experience-item">
-            <div>
-              <h3>SEO / SEM Specialist</h3>
-              <p>HAAPS</p>
-              <p>Bengaluru</p>
-            </div>
-
-            <div class="experience-information">
-              <span>Internship</span>
-              <p>Sep 2021 – Dec 2021</p>
-            </div>
-          </article>
-        </div>
-
-        <h2>Education</h2>
-
-        <div class="experience-list">
-          <article class="experience-item">
-            <div>
-              <h3>Bachelor in Electronics &amp; Communication</h3>
-              <p>Bangalore Institute of Technology</p>
-              <p>Bengaluru</p>
-            </div>
-
-            <div class="experience-information">
-              <span>Full Time</span>
-              <p>Aug 2015 – Dec 2020</p>
-            </div>
-          </article>
-        </div>
-      </section>
+  <noscript>
+    <p>JavaScript needs to be enabled to display the CV.</p>
+  </noscript>
+</section>
 
       <section id="technologies" class="technologies-section">
         <h2>Tech Stack</h2>

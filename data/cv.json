@@ -1,0 +1,36 @@
+{
+  "education": [
+    {
+      "title": "Fullstackutvecklare JavaScript",
+      "organization": "Chas Academy",
+      "description": "Pågående utbildning inom frontend och backend, med fokus på att bygga webbapplikationer med JavaScript."
+    },
+    {
+      "title": "Samhällsvetenskapsprogrammet",
+      "organization": "Thoren Business School",
+      "description": "Gymnasieutbildning med fokus på samhällsfrågor, analys och kommunikation."
+    },
+    {
+      "title": "Exempelutbildning",
+      "organization": "Exempelskola",
+      "description": "Dummy-post för uppgiften. Inte en verklig merit."
+    }
+  ],
+  "work": [
+    {
+      "title": "Arbete på HVB-hem",
+      "organization": "Humana",
+      "description": "Stöttade boende i vardagen och samarbetade med kollegor för att skapa en trygg och strukturerad miljö."
+    },
+    {
+      "title": "Hotellarbete",
+      "organization": "Steam Hotel",
+      "description": "Arbetade med service och samarbetade med kollegor för att ge gästerna en positiv upplevelse."
+    },
+    {
+      "title": "Exempelarbete",
+      "organization": "Exempelarbetsplats",
+      "description": "Dummy-post för uppgiften. Inte en verklig merit."
+    }
+  ]
+}
