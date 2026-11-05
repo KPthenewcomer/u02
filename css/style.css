@@ -497,33 +497,56 @@ main {
   margin-top: 2rem;
 }
 
-.project-card {
+.project-grid > li {
   min-width: 0;
+}
+
+.project-card {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  position: relative;
   overflow: hidden;
+  padding: calc(1.25rem + 6px) 1.25rem 1.25rem;
   border-radius: 14px;
   background-color: var(--card-background);
   box-shadow: 0 15px 30px var(--shadow-color);
 }
 
-.project-card > img {
-  width: 100%;
-  aspect-ratio: 1.5;
-  object-fit: cover;
+/* Dekorativ gradientlist i stället för bild */
+.project-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 6px;
+  background: var(--gradient);
 }
 
-.project-content {
-  padding: 1.25rem;
-}
-
-.project-content h3 {
+.project-card h3 {
   color: var(--project-heading-color);
   font-size: 1.2rem;
   font-weight: 500;
+  overflow-wrap: anywhere;
 }
 
-.project-content p {
+.project-card p {
   margin-top: 1rem;
   font-size: 0.95rem;
+}
+
+.project-card .project-language {
+  align-self: flex-start;
+  padding: 0.2rem 0.75rem;
+  border-radius: 999px;
+  background-color: var(--pill-background);
+  color: var(--heading-color);
+  font-size: 0.85rem;
+}
+
+.project-empty {
+  grid-column: 1 / -1;
 }
 
 .project-links {
@@ -531,7 +554,8 @@ main {
   flex-wrap: wrap;
   justify-content: space-between;
   gap: 1rem;
-  margin-top: 1.25rem;
+  margin-top: auto;
+  padding-top: 1.25rem;
 }
 
 .project-links a {
@@ -714,8 +738,8 @@ main {
     margin-top: 3.5rem;
   }
 
-  .project-content {
-    padding: 1.5rem;
+  .project-card {
+    padding: calc(1.5rem + 6px) 1.5rem 1.5rem;
   }
 
   .contact-section {

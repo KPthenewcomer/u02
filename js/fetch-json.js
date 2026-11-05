@@ -46,7 +46,7 @@ export function describeFetchError(error, subject) {
 
   if (error instanceof HttpError) {
     if ((error.status === 403 || error.status === 429) && error.rateLimitRemaining === "0") {
-      return `GitHub has temporarily limited requests, so ${subject} could not be loaded. Please wait a while and try again.`;
+      return `GitHub has temporarily limited requests, so ${subject} could not be loaded. The limit resets within an hour.`;
     }
 
     if (error.status === 404) {

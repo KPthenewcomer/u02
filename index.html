@@ -48,7 +48,7 @@
 
       <ul class="social-links" aria-label="Social media links">
         <li>
-          <a href="https://github.com/" aria-label="GitHub">
+          <a href="https://github.com/KPthenewcomer" aria-label="GitHub">
             <img src="img/Vector.svg" alt="" width="30" height="30" />
           </a>
         </li>
@@ -234,138 +234,37 @@
         </ul>
       </section>
 
-      <section id="projects" class="projects-section">
-        <h2>Projects</h2>
+      <section
+        id="projects"
+        class="projects-section"
+        aria-labelledby="projects-heading"
+      >
+        <h2 id="projects-heading">Projects</h2>
 
-        <p class="section-description">Things I've built so far</p>
+        <p class="section-description">
+          Public repositories from my GitHub, newest first
+        </p>
 
-        <div class="project-grid">
-          <article class="project-card">
-            <img src="img/Rectangle%206.png" alt="" loading="lazy" />
+        <p
+          id="projects-status"
+          class="data-status"
+          role="status"
+          tabindex="-1"
+        ></p>
 
-            <div class="project-content">
-              <h3>Project Tile goes here</h3>
+        <button id="projects-retry" class="retry-button" type="button" hidden>
+          Try again
+        </button>
 
-              <p>
-                This is sample project description random things are here in
-                description This is sample project lorem ipsum generator for
-                dummy content
-              </p>
+        <ul id="project-list" class="project-grid"></ul>
 
-              <p><strong>Tech stack:</strong> HTML, JavaScript, SASS, React</p>
-
-              <div class="project-links">
-                <a href="#">Live Preview</a>
-                <a href="#">View Code</a>
-              </div>
-            </div>
-          </article>
-
-          <article class="project-card">
-            <img src="img/Rectangle%208.png" alt="" loading="lazy" />
-
-            <div class="project-content">
-              <h3>Project Tile goes here</h3>
-
-              <p>
-                This is sample project description random things are here in
-                description This is sample project lorem ipsum generator for
-                dummy content
-              </p>
-
-              <p><strong>Tech stack:</strong> HTML, JavaScript, SASS, React</p>
-
-              <div class="project-links">
-                <a href="#">Live Preview</a>
-                <a href="#">View Code</a>
-              </div>
-            </div>
-          </article>
-
-          <article class="project-card">
-            <img src="img/Rectangle%2012.png" alt="" loading="lazy" />
-
-            <div class="project-content">
-              <h3>Project Tile goes here</h3>
-
-              <p>
-                This is sample project description random things are here in
-                description This is sample project lorem ipsum generator for
-                dummy content
-              </p>
-
-              <p><strong>Tech stack:</strong> HTML, JavaScript, SASS, React</p>
-
-              <div class="project-links">
-                <a href="#">Live Preview</a>
-                <a href="#">View Code</a>
-              </div>
-            </div>
-          </article>
-
-          <article class="project-card">
-            <img src="img/Rectangle%2013.png" alt="" loading="lazy" />
-
-            <div class="project-content">
-              <h3>Project Tile goes here</h3>
-
-              <p>
-                This is sample project description random things are here in
-                description This is sample project lorem ipsum generator for
-                dummy content
-              </p>
-
-              <p><strong>Tech stack:</strong> HTML, JavaScript, SASS, React</p>
-
-              <div class="project-links">
-                <a href="#">Live Preview</a>
-                <a href="#">View Code</a>
-              </div>
-            </div>
-          </article>
-
-          <article class="project-card">
-            <img src="img/Rectangle%2014.png" alt="" loading="lazy" />
-
-            <div class="project-content">
-              <h3>Project Tile goes here</h3>
-
-              <p>
-                This is sample project description random things are here in
-                description This is sample project lorem ipsum generator for
-                dummy content
-              </p>
-
-              <p><strong>Tech stack:</strong> HTML, JavaScript, SASS, React</p>
-
-              <div class="project-links">
-                <a href="#">Live Preview</a>
-                <a href="#">View Code</a>
-              </div>
-            </div>
-          </article>
-
-          <article class="project-card">
-            <img src="img/Rectangle%204.png" alt="" loading="lazy" />
-
-            <div class="project-content">
-              <h3>Project Tile goes here</h3>
-
-              <p>
-                This is sample project description random things are here in
-                description This is sample project lorem ipsum generator for
-                dummy content
-              </p>
-
-              <p><strong>Tech stack:</strong> HTML, JavaScript, SASS, React</p>
-
-              <div class="project-links">
-                <a href="#">Live Preview</a>
-                <a href="#">View Code</a>
-              </div>
-            </div>
-          </article>
-        </div>
+        <noscript>
+          <p>
+            JavaScript needs to be enabled to list the projects. You can find
+            them on
+            <a href="https://github.com/KPthenewcomer">my GitHub profile</a>.
+          </p>
+        </noscript>
       </section>
 
       <section id="contact" class="contact-section">
