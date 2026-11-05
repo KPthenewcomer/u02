@@ -21,7 +21,48 @@
     var(--gradient-pink)
   );
 
-  --text-gradient: linear-gradient(90deg, #00749a, #b50982);
+  /* Mörkare toner av gradienten så att texten klarar WCAG AA mot vitt */
+  --text-gradient-start: #00749a;
+  --text-gradient-end: #b50982;
+  --text-gradient: linear-gradient(
+    90deg,
+    var(--text-gradient-start),
+    var(--text-gradient-end)
+  );
+
+  --pill-background: #ecebf7;
+  --icon-tile-background: transparent;
+  --social-icon-filter: none;
+
+  color-scheme: light;
+}
+
+/*
+  Mörkt läge: samma variabler får nya värden.
+  Resten av CSS:en behöver inte veta vilket tema som är aktivt.
+*/
+
+:root.dark-theme {
+  --background-color: #14152b;
+  --heading-color: #e4e5ff;
+  --body-color: #c2c3d6;
+  --project-heading-color: #ffffff;
+  --border-color: #34365c;
+  --card-background: #1e1f3a;
+  --focus-color: #8ab8ff;
+  --shadow-color: rgba(0, 0, 0, 0.5);
+
+  /* Ljusare toner av gradienten så att texten syns mot mörk bakgrund */
+  --text-gradient-start: #3cc8f5;
+  --text-gradient-end: #ff79d2;
+
+  --pill-background: #2c2e52;
+  /* Svarta ikoner (GitHub, Sass) behöver en ljus platta för att synas */
+  --icon-tile-background: #f4f4fa;
+  /* Gör de grå sociala ikonerna ljusa */
+  --social-icon-filter: invert(1);
+
+  color-scheme: dark;
 }
 
 /* Grundinställningar */
@@ -174,11 +215,44 @@ ul {
   display: none;
 }
 
-/* Mobilmeny utan JavaScript */
+/* Temaknapp */
 
-.mobile-menu {
+.theme-toggle {
+  width: 44px;
+  height: 44px;
   margin-left: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  padding: 0;
+  border: 1px solid var(--border-color);
+  border-radius: 50%;
+  background-color: var(--card-background);
+  color: var(--heading-color);
+  cursor: pointer;
 }
+
+.theme-toggle:hover {
+  border-color: var(--heading-color);
+}
+
+.theme-toggle svg {
+  width: 22px;
+  height: 22px;
+}
+
+/* Visa en måne i ljust läge och en sol i mörkt läge */
+.theme-icon-sun,
+.dark-theme .theme-icon-moon {
+  display: none;
+}
+
+.dark-theme .theme-icon-sun {
+  display: block;
+}
+
+/* Mobilmeny */
 
 .menu-button {
   width: 44px;
@@ -395,6 +469,9 @@ main {
   display: flex;
   align-items: center;
   justify-content: center;
+  padding: 0.75rem;
+  border-radius: 16px;
+  background-color: var(--icon-tile-background);
 }
 
 .technology-grid img {
@@ -561,6 +638,10 @@ main {
     flex-shrink: 0;
   }
 
+  .theme-toggle {
+    margin-left: 0;
+  }
+
   .social-links a {
     display: flex;
     align-items: center;
@@ -573,6 +654,7 @@ main {
     width: 30px;
     height: 30px;
     object-fit: contain;
+    filter: var(--social-icon-filter);
   }
 
   .mobile-menu {
