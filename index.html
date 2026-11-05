@@ -14,7 +14,7 @@
     />
 
     <link rel="stylesheet" href="css/style.css" />
-    <script src="js/main.js" defer></script>
+    <script src="js/main.js" type="module"></script>
   </head>
 
   <body>
@@ -113,30 +113,30 @@
       </section>
 
       <section id="about" class="about-section" aria-labelledby="about-heading">
-  <h2 id="about-heading">About Me</h2>
+        <h2 id="about-heading">About Me</h2>
 
-  <p id="cv-status" role="status"></p>
+        <p id="cv-status" class="data-status" role="status" tabindex="-1"></p>
 
-  <button id="cv-retry" type="button" hidden>
-    Try again
-  </button>
+        <button id="cv-retry" class="retry-button" type="button" hidden>
+          Try again
+        </button>
 
-  <div class="cv-grid">
-    <section class="cv-column" aria-labelledby="work-heading">
-      <h3 id="work-heading">Work Experience</h3>
-      <ul id="work-list" class="experience-list"></ul>
-    </section>
+        <div id="cv-content" class="cv-grid">
+          <section class="cv-column" aria-labelledby="work-heading">
+            <h3 id="work-heading">Work Experience</h3>
+            <ul id="work-list" class="experience-list"></ul>
+          </section>
 
-    <section class="cv-column" aria-labelledby="education-heading">
-      <h3 id="education-heading">Education</h3>
-      <ul id="education-list" class="experience-list"></ul>
-    </section>
-  </div>
+          <section class="cv-column" aria-labelledby="education-heading">
+            <h3 id="education-heading">Education</h3>
+            <ul id="education-list" class="experience-list"></ul>
+          </section>
+        </div>
 
-  <noscript>
-    <p>JavaScript needs to be enabled to display the CV.</p>
-  </noscript>
-</section>
+        <noscript>
+          <p>JavaScript needs to be enabled to display the CV.</p>
+        </noscript>
+      </section>
 
       <section id="technologies" class="technologies-section">
         <h2>Tech Stack</h2>

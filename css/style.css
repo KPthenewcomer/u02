@@ -663,15 +663,46 @@ main {
   html {
     scroll-behavior: auto;
   }
+
+  .data-status.is-loading::before {
+    animation-duration: 3s;
+  }
 }
 
-/* CV-status och återförsök */
+/* Laddning, fel och återförsök (CV och projekt) */
 
-#cv-status {
+.data-status {
   margin-top: 1rem;
 }
 
-#cv-retry {
+.data-status:empty {
+  margin: 0;
+}
+
+.data-status.is-loading {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.data-status.is-loading::before {
+  content: "";
+  width: 1.25rem;
+  height: 1.25rem;
+  flex-shrink: 0;
+  border: 3px solid var(--border-color);
+  border-top-color: var(--heading-color);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.retry-button {
   margin-top: 1rem;
   padding: 0.75rem 1rem;
   border: 1px solid var(--body-color);
@@ -682,12 +713,12 @@ main {
   cursor: pointer;
 }
 
-#cv-retry:disabled {
+.retry-button:disabled {
   cursor: wait;
 }
 
 button:focus-visible,
-#cv-status:focus {
+.data-status:focus {
   outline: 3px solid var(--focus-color);
   outline-offset: 4px;
 }
@@ -758,10 +789,6 @@ button:focus-visible,
   color: var(--body-color);
   font-size: 0.95rem;
   line-height: 1.7;
-}
-
-#cv-status:empty {
-  margin: 0;
 }
 
 @media (min-width: 900px) {
