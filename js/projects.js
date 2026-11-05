@@ -5,7 +5,11 @@ const GITHUB_USERNAME = "KPthenewcomer";
 const GITHUB_PROFILE_URL = `https://github.com/${GITHUB_USERNAME}`;
 const REPOS_URL = `https://api.github.com/users/${GITHUB_USERNAME}/repos?sort=updated&per_page=100`;
 
+const ALL_LANGUAGES = "All";
+
 const projectList = document.querySelector("#project-list");
+const projectsStatus = document.querySelector("#projects-status");
+const filterGroup = document.querySelector("#project-filter");
 
 // Plockar ut de fält sidan behöver, så resten av koden slipper GitHubs format.
 function toProject(repo) {
@@ -88,10 +92,12 @@ async function loadAndRenderProjects() {
 
   if (projects.length === 0) {
     projectList.replaceChildren(createEmptyMessage());
+    filterGroup.hidden = true;
     return "";
   }
 
   projectList.replaceChildren(...projects.map(createProjectCard));
+  renderFilterButtons(projects);
 
   return `Showing ${formatProjectCount(projects.length)} from GitHub.`;
 }
@@ -100,8 +106,64 @@ function formatProjectCount(count) {
   return `${count} ${count === 1 ? "project" : "projects"}`;
 }
 
+// Ett filter per språk som finns bland projekten, plus "All".
+function renderFilterButtons(projects) {
+  const languages = [...new Set(projects.map((project) => project.language))].sort();
+
+  // Filtrering är meningslös om alla projekt har samma språk.
+  if (languages.length < 2) {
+    filterGroup.hidden = true;
+    return;
+  }
+
+  const buttons = [ALL_LANGUAGES, ...languages].map((language) => {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = "filter-button";
+    button.dataset.language = language;
+    button.textContent = language;
+    button.setAttribute("aria-pressed", String(language === ALL_LANGUAGES));
+    return button;
+  });
+
+  filterGroup.replaceChildren(...buttons);
+  filterGroup.hidden = false;
+}
+
+function filterProjects(selectedLanguage) {
+  const cards = [...projectList.children];
+  let visibleCount = 0;
+
+  for (const card of cards) {
+    const isVisible = selectedLanguage === ALL_LANGUAGES || card.dataset.language === selectedLanguage;
+    card.hidden = !isVisible;
+    if (isVisible) visibleCount += 1;
+  }
+
+  for (const button of filterGroup.querySelectorAll(".filter-button")) {
+    button.setAttribute("aria-pressed", String(button.dataset.language === selectedLanguage));
+  }
+
+  projectsStatus.textContent =
+    selectedLanguage === ALL_LANGUAGES
+      ? `Showing ${formatProjectCount(cards.length)} from GitHub.`
+      : `Showing ${visibleCount} of ${formatProjectCount(cards.length)}: ${selectedLanguage}.`;
+}
+
+/*
+  En lyssnare på gruppen i stället för en per knapp. Knapparna byggs om
+  vid varje hämtning, men gruppen finns kvar och behöver bara kopplas en gång.
+*/
+filterGroup.addEventListener("click", (event) => {
+  const button = event.target.closest(".filter-button");
+
+  if (button) {
+    filterProjects(button.dataset.language);
+  }
+});
+
 export const loadProjects = createDataSection({
-  statusElement: document.querySelector("#projects-status"),
+  statusElement: projectsStatus,
   retryButton: document.querySelector("#projects-retry"),
   busyElement: projectList,
   subject: "the projects from GitHub",
