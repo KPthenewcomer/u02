@@ -60,16 +60,16 @@ async function loadAndRenderCv() {
     throw new DataError("Invalid CV data");
   }
 
-  renderCvList(data.work, workList, "No work experience has been added yet.");
-  renderCvList(data.education, educationList, "No education has been added yet.");
+  renderCvList(data.work, workList, "Ingen arbetslivserfarenhet har lagts till ännu.");
+  renderCvList(data.education, educationList, "Ingen utbildning har lagts till ännu.");
 
-  return "CV loaded.";
+  return "CV:t är inläst.";
 }
 
 export const loadCv = createDataSection({
   statusElement: document.querySelector("#cv-status"),
   retryButton: document.querySelector("#cv-retry"),
   busyElement: document.querySelector("#cv-content"),
-  subject: "the CV",
+  subject: "CV:t",
   load: loadAndRenderCv,
 });

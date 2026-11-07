@@ -10,10 +10,10 @@ const SLOW_RESPONSE_DELAY_MS = 3000;
 export function createDataSection({ statusElement, retryButton, busyElement, subject, load }) {
   async function run() {
     const slowTimerId = setTimeout(() => {
-      statusElement.textContent = `Still loading ${subject}, the server is responding slowly…`;
+      statusElement.textContent = `Hämtar fortfarande ${subject}, servern svarar långsamt…`;
     }, SLOW_RESPONSE_DELAY_MS);
 
-    statusElement.textContent = `Loading ${subject}…`;
+    statusElement.textContent = `Hämtar ${subject}…`;
     statusElement.classList.add("is-loading");
     busyElement.setAttribute("aria-busy", "true");
     retryButton.disabled = true;
@@ -22,7 +22,7 @@ export function createDataSection({ statusElement, retryButton, busyElement, sub
       statusElement.textContent = await load();
       hideRetryButton();
     } catch (error) {
-      statusElement.textContent = `${describeFetchError(error, subject)} Please try again.`;
+      statusElement.textContent = `${describeFetchError(error, subject)} Försök igen.`;
       retryButton.hidden = false;
     } finally {
       clearTimeout(slowTimerId);
