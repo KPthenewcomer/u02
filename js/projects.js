@@ -18,8 +18,26 @@ function toProject(repo) {
     description: repo.description?.trim() || "No description has been added yet.",
     language: repo.language ?? "Other",
     codeUrl: repo.html_url,
-    liveUrl: repo.homepage?.trim() || null,
+    liveUrl: getLiveUrl(repo),
   };
+}
+
+/*
+  En egen webbadress i repots inställningar går först. Annars byggs
+  GitHub Pages-adressen om repot är publicerat där (has_pages).
+*/
+function getLiveUrl(repo) {
+  const homepage = repo.homepage?.trim();
+
+  if (homepage) {
+    return homepage;
+  }
+
+  if (repo.has_pages) {
+    return `https://${GITHUB_USERNAME.toLowerCase()}.github.io/${repo.name}/`;
+  }
+
+  return null;
 }
 
 function isValidRepo(repo) {
