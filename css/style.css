@@ -574,8 +574,14 @@ main {
   font-size: 0.95rem;
 }
 
-.project-card .project-language {
-  align-self: flex-start;
+.project-technologies {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+.project-technologies li {
   padding: 0.2rem 0.75rem;
   border-radius: 999px;
   background-color: var(--pill-background);

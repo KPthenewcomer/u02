@@ -4,22 +4,52 @@ import { DataError, fetchJson } from "./fetch-json.js";
 const GITHUB_USERNAME = "KPthenewcomer";
 const GITHUB_PROFILE_URL = `https://github.com/${GITHUB_USERNAME}`;
 const REPOS_URL = `https://api.github.com/users/${GITHUB_USERNAME}/repos?sort=updated&per_page=100`;
+const PROJECT_DETAILS_URL = "./data/projects.json";
 
-const ALL_LANGUAGES = "All";
+const ALL_TECHNOLOGIES = "All";
+const FALLBACK_DESCRIPTION = "No description has been added yet.";
 
 const projectList = document.querySelector("#project-list");
 const projectsStatus = document.querySelector("#projects-status");
 const filterGroup = document.querySelector("#project-filter");
 
-// Plockar ut de fält sidan behöver, så resten av koden slipper GitHubs format.
-function toProject(repo) {
+/*
+  Egna beskrivningar och tekniker per repo. GitHubs fält "language" visar
+  bara huvudspråket, så tekniklistan skrivs för hand i projects.json.
+  Filen är ett tillägg: går den inte att läsa visas projekten ändå.
+*/
+async function fetchProjectDetails() {
+  try {
+    const data = await fetchJson(PROJECT_DETAILS_URL);
+    const validDetails = (data?.projects ?? []).filter(
+      (detail) =>
+        typeof detail?.repo === "string" &&
+        typeof detail.description === "string" &&
+        Array.isArray(detail.technologies),
+    );
+
+    return new Map(validDetails.map((detail) => [detail.repo, detail]));
+  } catch {
+    return new Map();
+  }
+}
+
+// Slår ihop GitHubs svar med egna detaljer till de fält sidan behöver.
+function toProject(repo, details) {
+  const detail = details.get(repo.name);
+  const githubTechnologies = repo.language ? [repo.language] : [];
+
   return {
     name: repo.name,
-    description: repo.description?.trim() || "No description has been added yet.",
-    language: repo.language ?? "Other",
+    description: detail?.description || repo.description?.trim() || FALLBACK_DESCRIPTION,
+    technologies: detail?.technologies ?? githubTechnologies,
     codeUrl: repo.html_url,
     liveUrl: getLiveUrl(repo),
   };
+}
+
+function isValidRepo(repo) {
+  return typeof repo?.name === "string" && typeof repo.html_url === "string";
 }
 
 /*
@@ -40,10 +70,6 @@ function getLiveUrl(repo) {
   return null;
 }
 
-function isValidRepo(repo) {
-  return typeof repo?.name === "string" && typeof repo.html_url === "string";
-}
-
 // Länktexten blir t.ex. "View code" men skärmläsare hör "View code for u02".
 function createProjectLink(text, url, projectName) {
   const link = document.createElement("a");
@@ -57,20 +83,36 @@ function createProjectLink(text, url, projectName) {
   return link;
 }
 
-function createProjectCard({ name, description, language, codeUrl, liveUrl }) {
+function createTechnologyList(technologies) {
+  const list = document.createElement("ul");
+
+  list.className = "project-technologies";
+  list.setAttribute("aria-label", "Technologies");
+  list.append(
+    ...technologies.map((technology) => {
+      const listItem = document.createElement("li");
+      listItem.textContent = technology;
+      return listItem;
+    }),
+  );
+
+  return list;
+}
+
+// Teknikerna sparas på kortet så att filtret kan läsa dem.
+const projectTechnologies = new WeakMap();
+
+function createProjectCard({ name, description, technologies, codeUrl, liveUrl }) {
   const listItem = document.createElement("li");
   const article = document.createElement("article");
   const heading = document.createElement("h3");
   const descriptionText = document.createElement("p");
-  const languageText = document.createElement("p");
   const links = document.createElement("div");
 
-  listItem.dataset.language = language;
+  projectTechnologies.set(listItem, technologies);
   article.className = "project-card";
   heading.textContent = name;
   descriptionText.textContent = description;
-  languageText.className = "project-language";
-  languageText.textContent = language;
   links.className = "project-links";
 
   if (liveUrl) {
@@ -78,7 +120,13 @@ function createProjectCard({ name, description, language, codeUrl, liveUrl }) {
   }
   links.append(createProjectLink("View code", codeUrl, name));
 
-  article.append(heading, descriptionText, languageText, links);
+  article.append(heading, descriptionText);
+
+  if (technologies.length > 0) {
+    article.append(createTechnologyList(technologies));
+  }
+
+  article.append(links);
   listItem.append(article);
 
   return listItem;
@@ -97,16 +145,20 @@ function createEmptyMessage() {
 }
 
 async function loadAndRenderProjects() {
-  const repos = await fetchJson(REPOS_URL, {
-    headers: { Accept: "application/vnd.github+json" },
-  });
+  // Båda hämtningarna startar samtidigt i stället för efter varandra.
+  const [repos, details] = await Promise.all([
+    fetchJson(REPOS_URL, { headers: { Accept: "application/vnd.github+json" } }),
+    fetchProjectDetails(),
+  ]);
 
   if (!Array.isArray(repos)) {
     throw new DataError("Expected a list of repositories");
   }
 
   // Forkar är andras kod, så de visas inte som egna projekt.
-  const projects = repos.filter((repo) => isValidRepo(repo) && !repo.fork).map(toProject);
+  const projects = repos
+    .filter((repo) => isValidRepo(repo) && !repo.fork)
+    .map((repo) => toProject(repo, details));
 
   if (projects.length === 0) {
     projectList.replaceChildren(createEmptyMessage());
@@ -124,23 +176,23 @@ function formatProjectCount(count) {
   return `${count} ${count === 1 ? "project" : "projects"}`;
 }
 
-// Ett filter per språk som finns bland projekten, plus "All".
+// Ett filter per teknik som finns bland projekten, plus "All".
 function renderFilterButtons(projects) {
-  const languages = [...new Set(projects.map((project) => project.language))].sort();
+  const technologies = [...new Set(projects.flatMap((project) => project.technologies))].sort();
 
-  // Filtrering är meningslös om alla projekt har samma språk.
-  if (languages.length < 2) {
+  // Filtrering är meningslös om det bara finns en teknik.
+  if (technologies.length < 2) {
     filterGroup.hidden = true;
     return;
   }
 
-  const buttons = [ALL_LANGUAGES, ...languages].map((language) => {
+  const buttons = [ALL_TECHNOLOGIES, ...technologies].map((technology) => {
     const button = document.createElement("button");
     button.type = "button";
     button.className = "filter-button";
-    button.dataset.language = language;
-    button.textContent = language;
-    button.setAttribute("aria-pressed", String(language === ALL_LANGUAGES));
+    button.dataset.technology = technology;
+    button.textContent = technology;
+    button.setAttribute("aria-pressed", String(technology === ALL_TECHNOLOGIES));
     return button;
   });
 
@@ -148,24 +200,26 @@ function renderFilterButtons(projects) {
   filterGroup.hidden = false;
 }
 
-function filterProjects(selectedLanguage) {
+function filterProjects(selectedTechnology) {
   const cards = [...projectList.children];
   let visibleCount = 0;
 
   for (const card of cards) {
-    const isVisible = selectedLanguage === ALL_LANGUAGES || card.dataset.language === selectedLanguage;
+    const isVisible =
+      selectedTechnology === ALL_TECHNOLOGIES ||
+      (projectTechnologies.get(card)?.includes(selectedTechnology) ?? false);
     card.hidden = !isVisible;
     if (isVisible) visibleCount += 1;
   }
 
   for (const button of filterGroup.querySelectorAll(".filter-button")) {
-    button.setAttribute("aria-pressed", String(button.dataset.language === selectedLanguage));
+    button.setAttribute("aria-pressed", String(button.dataset.technology === selectedTechnology));
   }
 
   projectsStatus.textContent =
-    selectedLanguage === ALL_LANGUAGES
+    selectedTechnology === ALL_TECHNOLOGIES
       ? `Showing ${formatProjectCount(cards.length)} from GitHub.`
-      : `Showing ${visibleCount} of ${formatProjectCount(cards.length)}: ${selectedLanguage}.`;
+      : `Showing ${visibleCount} of ${formatProjectCount(cards.length)} built with ${selectedTechnology}.`;
 }
 
 /*
@@ -176,7 +230,7 @@ filterGroup.addEventListener("click", (event) => {
   const button = event.target.closest(".filter-button");
 
   if (button) {
-    filterProjects(button.dataset.language);
+    filterProjects(button.dataset.technology);
   }
 });
 

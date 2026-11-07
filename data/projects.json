@@ -1,0 +1,24 @@
+{
+  "projects": [
+    {
+      "repo": "brain-climb",
+      "description": "School group project: an everyday quiz with 10 questions, a countdown timer and a score jar that fills up with every correct answer.",
+      "technologies": ["HTML", "CSS", "JavaScript"]
+    },
+    {
+      "repo": "4YOURSKIN",
+      "description": "School project: a skincare shop prototype where a five-question skin quiz recommends a personal routine, with product listing and shopping cart.",
+      "technologies": ["HTML", "CSS", "JavaScript", "TypeScript"]
+    },
+    {
+      "repo": "u01",
+      "description": "School project: my first developer portfolio, built from a Figma design with semantic, responsive HTML and CSS.",
+      "technologies": ["HTML", "CSS"]
+    },
+    {
+      "repo": "u02",
+      "description": "School project: this portfolio rebuilt with JavaScript. The CV is loaded from JSON and the projects from the GitHub API, with dark mode and filtering.",
+      "technologies": ["HTML", "CSS", "JavaScript"]
+    }
+  ]
+}
