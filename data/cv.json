@@ -1,36 +1,36 @@
 {
   "education": [
     {
-      "title": "Fullstackutvecklare JavaScript",
+      "title": "Fullstack Developer JavaScript",
       "organization": "Chas Academy",
-      "description": "Pågående utbildning inom frontend och backend, med fokus på att bygga webbapplikationer med JavaScript."
+      "description": "Ongoing vocational program in frontend and backend development, focused on building web applications with JavaScript."
     },
     {
-      "title": "Samhällsvetenskapsprogrammet",
+      "title": "Social Science Programme",
       "organization": "Thoren Business School",
-      "description": "Gymnasieutbildning med fokus på samhällsfrågor, analys och kommunikation."
+      "description": "Upper secondary education focused on social issues, analysis and communication."
     },
     {
-      "title": "Exempelutbildning",
-      "organization": "Exempelskola",
-      "description": "Dummy-post för uppgiften. Inte en verklig merit."
+      "title": "Example Education",
+      "organization": "Example School",
+      "description": "Placeholder entry for the assignment. Not an actual qualification."
     }
   ],
   "work": [
     {
-      "title": "Arbete på HVB-hem",
+      "title": "Residential Care Worker",
       "organization": "Humana",
-      "description": "Stöttade boende i vardagen och samarbetade med kollegor för att skapa en trygg och strukturerad miljö."
+      "description": "Supported residents in their daily lives and worked with colleagues to create a safe and structured environment."
     },
     {
-      "title": "Hotellarbete",
+      "title": "Hotel Staff",
       "organization": "Steam Hotel",
-      "description": "Arbetade med service och samarbetade med kollegor för att ge gästerna en positiv upplevelse."
+      "description": "Worked in guest service and collaborated with colleagues to give guests a positive experience."
     },
     {
-      "title": "Exempelarbete",
-      "organization": "Exempelarbetsplats",
-      "description": "Dummy-post för uppgiften. Inte en verklig merit."
+      "title": "Example Job",
+      "organization": "Example Workplace",
+      "description": "Placeholder entry for the assignment. Not an actual work experience."
     }
   ]
 }
