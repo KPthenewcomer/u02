@@ -9,20 +9,27 @@ const SLOW_RESPONSE_DELAY_MS = 3000;
 */
 export function createDataSection({ statusElement, retryButton, busyElement, subject, load }) {
   async function run() {
+    // Måste läsas innan knappen inaktiveras, eftersom den då tappar fokus.
+    const retryHadFocus = document.activeElement === retryButton;
+
     const slowTimerId = setTimeout(() => {
-      statusElement.textContent = `Hämtar fortfarande ${subject}, servern svarar långsamt…`;
+      statusElement.textContent = `Still loading ${subject}, the server is responding slowly…`;
     }, SLOW_RESPONSE_DELAY_MS);
 
-    statusElement.textContent = `Hämtar ${subject}…`;
+    statusElement.textContent = `Loading ${subject}…`;
     statusElement.classList.add("is-loading");
     busyElement.setAttribute("aria-busy", "true");
     retryButton.disabled = true;
 
     try {
       statusElement.textContent = await load();
-      hideRetryButton();
+      retryButton.hidden = true;
+
+      if (retryHadFocus) {
+        moveFocusAfterSuccess();
+      }
     } catch (error) {
-      statusElement.textContent = `${describeFetchError(error, subject)} Försök igen.`;
+      statusElement.textContent = `${describeFetchError(error, subject)} Please try again.`;
       retryButton.hidden = false;
     } finally {
       clearTimeout(slowTimerId);
@@ -30,15 +37,24 @@ export function createDataSection({ statusElement, retryButton, busyElement, sub
       busyElement.setAttribute("aria-busy", "false");
       retryButton.disabled = false;
     }
+
+    // Misslyckades ett nytt försök får knappen tillbaka fokus.
+    if (retryHadFocus && !retryButton.hidden) {
+      retryButton.focus();
+    }
   }
 
-  // Fokus flyttas till statustexten om knappen som har fokus försvinner.
-  function hideRetryButton() {
-    if (document.activeElement === retryButton) {
-      statusElement.focus();
-    }
+  /*
+    Knappen som hade fokus är borta. Fokus flyttas till statustexten,
+    eller till sektionens rubrik om statustexten är tom.
+  */
+  function moveFocusAfterSuccess() {
+    const focusTarget = statusElement.textContent
+      ? statusElement
+      : statusElement.closest("section").querySelector("h2");
 
-    retryButton.hidden = true;
+    focusTarget.tabIndex = -1;
+    focusTarget.focus();
   }
 
   retryButton.addEventListener("click", run);

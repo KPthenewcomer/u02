@@ -22,6 +22,8 @@ function renderCvList(entries, container, emptyMessage) {
     const organizationText = document.createElement("p");
 
     article.className = "experience-item";
+    // CV-datan är på svenska medan sidan är på engelska.
+    article.lang = "sv";
     heading.textContent = title;
     organizationText.textContent = organization;
     article.append(heading, organizationText);
@@ -60,16 +62,17 @@ async function loadAndRenderCv() {
     throw new DataError("Invalid CV data");
   }
 
-  renderCvList(data.work, workList, "Ingen arbetslivserfarenhet har lagts till ännu.");
-  renderCvList(data.education, educationList, "Ingen utbildning har lagts till ännu.");
+  renderCvList(data.work, workList, "No work experience has been added yet.");
+  renderCvList(data.education, educationList, "No education has been added yet.");
 
-  return "CV:t är inläst.";
+  // Innehållet syns direkt, så ingen statustext behövs när allt gick bra.
+  return "";
 }
 
 export const loadCv = createDataSection({
   statusElement: document.querySelector("#cv-status"),
   retryButton: document.querySelector("#cv-retry"),
   busyElement: document.querySelector("#cv-content"),
-  subject: "CV:t",
+  subject: "the CV",
   load: loadAndRenderCv,
 });

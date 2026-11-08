@@ -41,31 +41,31 @@ export async function fetchJson(url, { timeoutMs = DEFAULT_TIMEOUT_MS, headers }
 // Översätter ett tekniskt fel till en mening som besökaren förstår.
 export function describeFetchError(error, subject) {
   if (error.name === "TimeoutError" || error.name === "AbortError") {
-    return `Det tog för lång tid att hämta ${subject}.`;
+    return `Loading ${subject} took too long.`;
   }
 
   if (error instanceof HttpError) {
     if ((error.status === 403 || error.status === 429) && error.rateLimitRemaining === "0") {
-      return `GitHub har tillfälligt begränsat antalet anrop, så ${subject} kunde inte hämtas. Gränsen återställs inom en timme.`;
+      return `GitHub has temporarily limited requests, so ${subject} could not be loaded. The limit resets within an hour.`;
     }
 
     if (error.status === 404) {
-      return `${capitalize(subject)} hittades inte.`;
+      return `${capitalize(subject)} could not be found.`;
     }
 
-    return `Servern svarade med ett fel (${error.status}), så ${subject} kunde inte hämtas.`;
+    return `The server answered with an error (${error.status}), so ${subject} could not be loaded.`;
   }
 
   if (error instanceof DataError) {
-    return `${capitalize(subject)} kom i ett oväntat format.`;
+    return `${capitalize(subject)} arrived in an unexpected format.`;
   }
 
   // Fetch kastar TypeError när nätverket inte går att nå.
   if (error instanceof TypeError) {
-    return `Det gick inte att ansluta för att hämta ${subject}. Kontrollera din internetanslutning.`;
+    return `Could not connect to load ${subject}. Check your connection.`;
   }
 
-  return `Något gick fel när ${subject} skulle hämtas.`;
+  return `Something went wrong while loading ${subject}.`;
 }
 
 function capitalize(text) {

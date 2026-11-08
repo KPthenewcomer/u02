@@ -6,8 +6,8 @@ const GITHUB_PROFILE_URL = `https://github.com/${GITHUB_USERNAME}`;
 const REPOS_URL = `https://api.github.com/users/${GITHUB_USERNAME}/repos?sort=updated&per_page=100`;
 const PROJECT_DETAILS_URL = "./data/projects.json";
 
-const ALL_TECHNOLOGIES = "Alla";
-const FALLBACK_DESCRIPTION = "Ingen beskrivning har lagts till ännu.";
+const ALL_TECHNOLOGIES = "All";
+const FALLBACK_DESCRIPTION = "No description has been added yet.";
 
 const projectList = document.querySelector("#project-list");
 const projectsStatus = document.querySelector("#projects-status");
@@ -70,14 +70,14 @@ function getLiveUrl(repo) {
   return null;
 }
 
-// Länktexten blir t.ex. "Visa koden" men skärmläsare hör "Visa koden för u02".
+// Länktexten blir t.ex. "View code" men skärmläsare hör "View code for u02".
 function createProjectLink(text, url, projectName) {
   const link = document.createElement("a");
   const hiddenText = document.createElement("span");
 
   link.href = url;
   hiddenText.className = "visually-hidden";
-  hiddenText.textContent = ` för ${projectName}`;
+  hiddenText.textContent = ` for ${projectName}`;
   link.append(text, hiddenText);
 
   return link;
@@ -87,7 +87,7 @@ function createTechnologyList(technologies) {
   const list = document.createElement("ul");
 
   list.className = "project-technologies";
-  list.setAttribute("aria-label", "Tekniker");
+  list.setAttribute("aria-label", "Technologies");
   list.append(
     ...technologies.map((technology) => {
       const listItem = document.createElement("li");
@@ -113,12 +113,16 @@ function createProjectCard({ name, description, technologies, codeUrl, liveUrl }
   article.className = "project-card";
   heading.textContent = name;
   descriptionText.textContent = description;
+  // Beskrivningarna i projects.json är på svenska. GitHubs reservtext är på engelska.
+  if (description !== FALLBACK_DESCRIPTION) {
+    descriptionText.lang = "sv";
+  }
   links.className = "project-links";
 
   if (liveUrl) {
-    links.append(createProjectLink("Se live", liveUrl, name));
+    links.append(createProjectLink("Live preview", liveUrl, name));
   }
-  links.append(createProjectLink("Visa koden", codeUrl, name));
+  links.append(createProjectLink("View code", codeUrl, name));
 
   article.append(heading, descriptionText);
 
@@ -138,8 +142,8 @@ function createEmptyMessage() {
 
   listItem.className = "project-empty";
   link.href = GITHUB_PROFILE_URL;
-  link.textContent = "min GitHub-profil";
-  listItem.append("Det finns inga publika projekt att visa ännu. Besök ", link, " för uppdateringar.");
+  link.textContent = "my GitHub profile";
+  listItem.append("There are no public projects to show yet. Visit ", link, " for updates.");
 
   return listItem;
 }
@@ -169,10 +173,14 @@ async function loadAndRenderProjects() {
   projectList.replaceChildren(...projects.map(createProjectCard));
   renderFilterButtons(projects);
 
-  return `Visar ${projects.length} projekt från GitHub.`;
+  return `Showing ${formatProjectCount(projects.length)} from GitHub.`;
 }
 
-// Ett filter per teknik som finns bland projekten, plus "Alla".
+function formatProjectCount(count) {
+  return `${count} ${count === 1 ? "project" : "projects"}`;
+}
+
+// Ett filter per teknik som finns bland projekten, plus "All".
 function renderFilterButtons(projects) {
   const technologies = [...new Set(projects.flatMap((project) => project.technologies))].sort();
 
@@ -214,8 +222,8 @@ function filterProjects(selectedTechnology) {
 
   projectsStatus.textContent =
     selectedTechnology === ALL_TECHNOLOGIES
-      ? `Visar ${cards.length} projekt från GitHub.`
-      : `Visar ${visibleCount} av ${cards.length} projekt byggda med ${selectedTechnology}.`;
+      ? `Showing ${formatProjectCount(cards.length)} from GitHub.`
+      : `Showing ${visibleCount} of ${formatProjectCount(cards.length)} built with ${selectedTechnology}.`;
 }
 
 /*
@@ -234,6 +242,6 @@ export const loadProjects = createDataSection({
   statusElement: projectsStatus,
   retryButton: document.querySelector("#projects-retry"),
   busyElement: projectList,
-  subject: "projekten från GitHub",
+  subject: "the projects from GitHub",
   load: loadAndRenderProjects,
 });
